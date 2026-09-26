@@ -1,23 +1,140 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plataforma de Simulación de Crédito</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Simulador de crédito personal con tabla de amortización."
+    >
+
+    <title>Banco JVC</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
-<div class="container">
-<h1>Simulador de Crédito Personal</h1>
-<form id="credit-form">
-<label for="monto">Monto del Crédito Solicitado ($):</label>
-<input type="number" id="monto" value="150000" required>
-<label for="tasa">Tasa de Interés Anual Ordinaria (%):</label>
-<input type="number" id="tasa" value="34" step="0.1" required>
-<label for="plazo">Plazo del Financiamiento (Meses):</label>
-<select id="plazo">
-<option value="12">12 meses</option>
-<option value="24">24 meses</option>
-<option value="36">36 meses</option>
-<option value="48" selected>48 meses</option>
-</select>
+
+    <main class="container">
+
+        <h1>Banco JVC</h1>
+
+        <form id="credit-form">
+
+            <div class="form-group">
+                <label for="monto">
+                    Monto del crédito solicitado ($)
+                </label>
+
+                <input
+                    type="number"
+                    id="monto"
+                    name="monto"
+                    value="150000"
+                    min="1000"
+                    max="5000000"
+                    step="100"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="tasa">
+                    Tasa de interés anual ordinaria (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="tasa"
+                    name="tasa"
+                    value="34"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="plazo">
+                    Plazo del financiamiento
+                </label>
+
+                <select id="plazo" name="plazo" required>
+                    <option value="12">12 meses</option>
+                    <option value="24">24 meses</option>
+                    <option value="36">36 meses</option>
+                    <option value="48" selected>48 meses</option>
+                    <option value="60">60 meses</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btn-calcular">
+                Calcular crédito
+            </button>
+
+        </form>
+
+
+        <section id="resultados" aria-live="polite">
+
+            <h2>Resultado</h2>
+
+            <div class="resumen">
+
+                <div class="resultado-card">
+                    <span>Primer pago</span>
+                    <strong id="pago-inicial">$0.00</strong>
+                </div>
+
+                <div class="resultado-card">
+                    <span>Total de intereses</span>
+                    <strong id="total-intereses">$0.00</strong>
+                </div>
+
+                <div class="resultado-card">
+                    <span>Total de IVA</span>
+                    <strong id="total-iva">$0.00</strong>
+                </div>
+
+                <div class="resultado-card">
+                    <span>Total a pagar</span>
+                    <strong id="total-pagar">$0.00</strong>
+                </div>
+
+            </div>
+
+
+            <h2>Tabla de amortización</h2>
+
+            <div class="tabla-container">
+
+                <table id="tabla-amortizacion">
+
+                    <thead>
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Saldo inicial</th>
+                            <th>Capital</th>
+                            <th>Interés</th>
+                            <th>IVA</th>
+                            <th>Pago total</th>
+                            <th>Saldo final</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
