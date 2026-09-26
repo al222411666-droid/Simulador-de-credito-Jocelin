@@ -1,22 +1,53 @@
+// ==========================================
+// ELEMENTOS DEL FORMULARIO DEL CLIENTE
+// ==========================================
+
+const clienteForm = document.getElementById("cliente-form");
+const btnContinuar = document.getElementById("btn-continuar");
+
+const seccionCredito =
+    document.getElementById("seccion-credito");
+
+
+// ==========================================
+// ELEMENTOS DEL FORMULARIO DE CRÉDITO
+// ==========================================
+
 const form = document.getElementById("credit-form");
 
-const montoInput = document.getElementById("monto");
-const tasaInput = document.getElementById("tasa");
-const plazoInput = document.getElementById("plazo");
+const montoInput =
+    document.getElementById("monto");
 
-const tablaBody = document.querySelector(
-    "#tabla-amortizacion tbody"
-);
+const tasaInput =
+    document.getElementById("tasa");
 
-const pagoInicial = document.getElementById("pago-inicial");
-const totalIntereses = document.getElementById("total-intereses");
-const totalIVA = document.getElementById("total-iva");
-const totalPagar = document.getElementById("total-pagar");
+const plazoInput =
+    document.getElementById("plazo");
 
 
-/*
-    FORMATO DE MONEDA
-*/
+// ==========================================
+// ELEMENTOS DE RESULTADOS
+// ==========================================
+
+const tablaBody =
+    document.querySelector("#tabla-amortizacion tbody");
+
+const pagoInicial =
+    document.getElementById("pago-inicial");
+
+const totalIntereses =
+    document.getElementById("total-intereses");
+
+const totalIVA =
+    document.getElementById("total-iva");
+
+const totalPagar =
+    document.getElementById("total-pagar");
+
+
+// ==========================================
+// FORMATO DE MONEDA
+// ==========================================
 
 const formatoMoneda = new Intl.NumberFormat("es-MX", {
     style: "currency",
@@ -24,121 +55,151 @@ const formatoMoneda = new Intl.NumberFormat("es-MX", {
 });
 
 
-/*
-    EVENTO DEL FORMULARIO
-*/
+// ==========================================
+// OCULTAR CRÉDITO AL INICIO
+// ==========================================
 
-form.addEventListener("submit", function (event) {
+seccionCredito.style.display = "none";
 
-    event.preventDefault();
 
-    procesarSimulacion();
+// ==========================================
+// CONTINUAR CON LA SOLICITUD
+// ==========================================
+
+btnContinuar.addEventListener("click", () => {
+
+    // Comprobar datos del cliente
+
+    if (!clienteForm.checkValidity()) {
+
+        clienteForm.reportValidity();
+
+        return;
+    }
+
+
+    // Mostrar sección de crédito
+
+    seccionCredito.style.display = "block";
+
+
+    // Desplazar hacia la sección
+
+    seccionCredito.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
 });
 
 
-/*
-    FUNCIÓN PRINCIPAL
-*/
+// ==========================================
+// CALCULAR CRÉDITO
+// ==========================================
 
-function procesarSimulacion() {
+form.addEventListener("submit", (event) => {
 
-    const monto = parseFloat(montoInput.value);
+    event.preventDefault();
 
-    const tasaAnual = parseFloat(tasaInput.value);
+    calcularCredito();
 
-    const plazo = parseInt(plazoInput.value);
-
-
-    /*
-        IVA SOBRE INTERESES
-    */
-
-    const IVA_VALOR = 0.16;
+});
 
 
-    /*
-        VALIDACIÓN
-    */
+// ==========================================
+// FUNCIÓN PRINCIPAL
+// ==========================================
 
-    if (
-        !Number.isFinite(monto) ||
-        !Number.isFinite(tasaAnual) ||
-        !Number.isInteger(plazo)
-    ) {
+function calcularCredito() {
 
-        alert("Ingrese valores numéricos válidos.");
+    const monto =
+        Number(montoInput.value);
 
-        return;
-    }
+    const tasaAnual =
+        Number(tasaInput.value);
 
-
-    if (monto <= 0) {
-
-        alert("El monto debe ser mayor a $0.");
-
-        return;
-    }
+    const plazo =
+        Number(plazoInput.value);
 
 
-    if (tasaAnual < 0) {
+    // ======================================
+    // VALIDACIONES
+    // ======================================
 
-        alert("La tasa no puede ser negativa.");
+    if (!Number.isFinite(monto) || monto <= 0) {
+
+        alert("Ingrese un monto de crédito válido.");
+
+        montoInput.focus();
 
         return;
     }
 
 
-    if (plazo <= 0) {
+    if (!Number.isFinite(tasaAnual) || tasaAnual < 0) {
 
-        alert("El plazo debe ser mayor a cero.");
+        alert("Ingrese una tasa de interés válida.");
+
+        tasaInput.focus();
 
         return;
     }
 
 
-    /*
-        TASA MENSUAL
-    */
+    if (!Number.isInteger(plazo) || plazo <= 0) {
+
+        alert("Seleccione un plazo válido.");
+
+        plazoInput.focus();
+
+        return;
+    }
+
+
+    // ======================================
+    // CONFIGURACIÓN
+    // ======================================
+
+    const IVA = 0.16;
+
+
+    // Tasa mensual
 
     const tasaMensual =
         (tasaAnual / 100) / 12;
 
 
-    /*
-        CAPITAL CONSTANTE
+    // Capital que se paga cada mes
 
-        El capital se divide entre
-        todos los meses.
-    */
-
-    const amortizacionCapital =
+    const capitalMensual =
         monto / plazo;
 
 
-    /*
-        VARIABLES ACUMULADORAS
-    */
+    // ======================================
+    // VARIABLES
+    // ======================================
 
-    let saldoInsoluto = monto;
+    let saldo =
+        monto;
 
-    let acumuladoIntereses = 0;
+    let interesesTotales =
+        0;
 
-    let acumuladoIVA = 0;
+    let ivaTotal =
+        0;
 
-    let acumuladoPagos = 0;
+    let pagosTotales =
+        0;
 
 
-    /*
-        LIMPIAR TABLA
-    */
+    // Limpiar tabla
 
     tablaBody.innerHTML = "";
 
 
-    /*
-        GENERAR TABLA
-    */
+    // ======================================
+    // GENERAR AMORTIZACIÓN
+    // ======================================
 
     for (
         let periodo = 1;
@@ -146,46 +207,38 @@ function procesarSimulacion() {
         periodo++
     ) {
 
-        /*
-            SALDO INICIAL
-        */
-
-        const saldoInicial = saldoInsoluto;
+        const saldoInicial =
+            saldo;
 
 
-        /*
-            INTERÉS DEL MES
-        */
+        // Interés del periodo
 
         const interes =
             saldoInicial * tasaMensual;
 
 
-        /*
-            IVA SOBRE EL INTERÉS
-        */
+        // IVA del interés
 
         const iva =
-            interes * IVA_VALOR;
+            interes * IVA;
 
 
-        /*
-            CAPITAL
+        // Capital
 
-            En el último periodo utilizamos
-            todo el saldo restante para evitar
-            problemas de redondeo.
-        */
-
-        const capital =
-            periodo === plazo
-                ? saldoInicial
-                : amortizacionCapital;
+        let capital =
+            capitalMensual;
 
 
-        /*
-            PAGO TOTAL
-        */
+        // Último pago
+
+        if (periodo === plazo) {
+
+            capital =
+                saldoInicial;
+        }
+
+
+        // Pago total
 
         const pagoTotal =
             capital +
@@ -193,9 +246,7 @@ function procesarSimulacion() {
             iva;
 
 
-        /*
-            SALDO FINAL
-        */
+        // Saldo restante
 
         const saldoFinal =
             Math.max(
@@ -204,72 +255,86 @@ function procesarSimulacion() {
             );
 
 
-        /*
-            ACUMULADOS
-        */
+        // ==================================
+        // ACUMULAR
+        // ==================================
 
-        acumuladoIntereses += interes;
+        interesesTotales +=
+            interes;
 
-        acumuladoIVA += iva;
+        ivaTotal +=
+            iva;
 
-        acumuladoPagos += pagoTotal;
+        pagosTotales +=
+            pagoTotal;
 
 
-        /*
-            CREAR FILA
-        */
+        // ==================================
+        // CREAR FILA
+        // ==================================
 
         const fila =
             document.createElement("tr");
 
 
         fila.innerHTML = `
-            <td>${periodo}</td>
 
             <td>
-                ${formatoMoneda.format(saldoInicial)}
+                ${periodo}
             </td>
 
             <td>
-                ${formatoMoneda.format(capital)}
+                ${formatoMoneda.format(
+                    saldoInicial
+                )}
             </td>
 
             <td>
-                ${formatoMoneda.format(interes)}
+                ${formatoMoneda.format(
+                    capital
+                )}
             </td>
 
             <td>
-                ${formatoMoneda.format(iva)}
+                ${formatoMoneda.format(
+                    interes
+                )}
             </td>
 
             <td>
-                ${formatoMoneda.format(pagoTotal)}
+                ${formatoMoneda.format(
+                    iva
+                )}
             </td>
 
             <td>
-                ${formatoMoneda.format(saldoFinal)}
+                ${formatoMoneda.format(
+                    pagoTotal
+                )}
             </td>
+
+            <td>
+                ${formatoMoneda.format(
+                    saldoFinal
+                )}
+            </td>
+
         `;
 
-
-        /*
-            AGREGAR FILA A LA TABLA
-        */
 
         tablaBody.appendChild(fila);
 
 
-        /*
-            ACTUALIZAR SALDO
-        */
+        // Actualizar saldo
 
-        saldoInsoluto = saldoFinal;
+        saldo =
+            saldoFinal;
     }
 
 
-    /*
-        MOSTRAR PRIMER PAGO
-    */
+    // ======================================
+    // MOSTRAR PRIMER PAGO
+    // ======================================
 
     const primeraFila =
         tablaBody.querySelector("tr");
@@ -280,29 +345,47 @@ function procesarSimulacion() {
         const celdas =
             primeraFila.querySelectorAll("td");
 
+
+        // La columna 5 es Pago Total
+
         pagoInicial.textContent =
-            celdas[5].textContent;
+            celdas[5].textContent.trim();
     }
 
 
-    /*
-        MOSTRAR TOTALES
-    */
+    // ======================================
+    // MOSTRAR TOTALES
+    // ======================================
 
     totalIntereses.textContent =
         formatoMoneda.format(
-            acumuladoIntereses
+            interesesTotales
         );
 
 
     totalIVA.textContent =
         formatoMoneda.format(
-            acumuladoIVA
+            ivaTotal
         );
 
 
     totalPagar.textContent =
         formatoMoneda.format(
-            acumuladoPagos
+            pagosTotales
         );
+
+
+    // ======================================
+    // MOSTRAR RESULTADOS
+    // ======================================
+
+    const resultados =
+        document.getElementById("resultados");
+
+
+    resultados.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
 }
