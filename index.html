@@ -1,128 +1,448 @@
 <!DOCTYPE html>
 <html lang="es-MX">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <meta
         name="description"
-        content="Simulador de crédito personal con tabla de amortización."
+        content="Simulador de crédito personal Banco JVC."
     >
 
     <title>Banco JVC</title>
 
     <link rel="stylesheet" href="styles.css">
+
     <script src="script.js" defer></script>
 </head>
+
 
 <body>
 
     <main class="container">
 
-        <h1>Banco JVC</h1>
+        <header class="logo-header">
 
-        <form id="credit-form">
+            <div class="logo">
+                <span>JVC</span>
+            </div>
 
-            <div class="form-group">
-                <label for="monto">
-                    Monto del crédito solicitado ($)
-                </label>
+            <h1>Banco JVC</h1>
 
-                <input
-                    type="number"
-                    id="monto"
-                    name="monto"
-                    value="150000"
-                    min="1000"
-                    max="5000000"
-                    step="100"
-                    required
+            <p class="subtitulo">
+                Banco JVC
+            </p>
+
+        </header>
+
+        <section class="seccion">
+
+            <h2>Datos del cliente</h2>
+
+            <p class="descripcion">
+                Antes de solicitar el crédito, complete sus datos personales.
+            </p>
+
+            <form id="cliente-form">
+
+                <div class="form-group">
+
+                    <label for="nombre">
+                        Nombre
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingrese su nombre"
+                        maxlength="50"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+
+                    <label for="apellidos">
+                        Apellidos
+                    </label>
+
+                    <input
+                        type="text"
+                        id="apellidos"
+                        name="apellidos"
+                        placeholder="Ingrese sus apellidos"
+                        maxlength="80"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="edad">
+                        Edad
+                    </label>
+
+                    <input
+                        type="number"
+                        id="edad"
+                        name="edad"
+                        placeholder="Ingrese su edad"
+                        min="18"
+                        max="100"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="estado-civil">
+                        Estado civil
+                    </label>
+
+                    <select
+                        id="estado-civil"
+                        name="estado-civil"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccione una opción
+                        </option>
+
+                        <option value="soltero">
+                            Soltero(a)
+                        </option>
+
+                        <option value="casado">
+                            Casado(a)
+                        </option>
+
+                        <option value="union-libre">
+                            Unión libre
+                        </option>
+
+                        <option value="divorciado">
+                            Divorciado(a)
+                        </option>
+
+                        <option value="viudo">
+                            Viudo(a)
+                        </option>
+
+                        <option value="separado">
+                            Separado(a)
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="municipio">
+                        Municipio
+                    </label>
+
+                    <input
+                        type="text"
+                        id="municipio"
+                        name="municipio"
+                        placeholder="Ingrese su municipio"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="localidad">
+                        Localidad
+                    </label>
+
+                    <input
+                        type="text"
+                        id="localidad"
+                        name="localidad"
+                        placeholder="Ingrese su localidad"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="estado">
+                        Estado
+                    </label>
+
+                    <select
+                        id="estado"
+                        name="estado"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccione un estado
+                        </option>
+
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>Chiapas</option>
+                        <option>Chihuahua</option>
+                        <option>Ciudad de México</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Estado de México</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Roo</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+
+                    </select>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="btn-continuar"
                 >
-            </div>
+                    Continuar con la solicitud
+                </button>
 
-            <div class="form-group">
-                <label for="tasa">
-                    Tasa de interés anual ordinaria (%)
-                </label>
+            </form>
 
-                <input
-                    type="number"
-                    id="tasa"
-                    name="tasa"
-                    value="34"
-                    min="0"
-                    max="100"
-                    step="0.1"
-                    required
+        </section>
+
+        <section
+            class="seccion credito-seccion"
+            id="seccion-credito"
+        >
+            <h2>Solicitud de crédito</h2>
+
+            <p class="descripcion">
+                Indique las condiciones del crédito que desea simular.
+            </p>
+
+            <form id="credit-form">
+
+                <div class="form-group">
+
+                    <label for="monto">
+                        Monto del crédito solicitado ($)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="monto"
+                        name="monto"
+                        value="150000"
+                        min="1000"
+                        max="5000000"
+                        step="100"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="tasa">
+                        Tasa de interés anual ordinaria (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="tasa"
+                        name="tasa"
+                        value="34"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="plazo">
+                        Plazo del financiamiento
+                    </label>
+
+                    <select
+                        id="plazo"
+                        name="plazo"
+                        required
+                    >
+
+                        <option value="12">
+                            12 meses
+                        </option>
+
+                        <option value="24">
+                            24 meses
+                        </option>
+
+                        <option value="36">
+                            36 meses
+                        </option>
+
+                        <option value="48" selected>
+                            48 meses
+                        </option>
+
+                        <option value="60">
+                            60 meses
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="btn-calcular"
                 >
-            </div>
+                    Calcular crédito
+                </button>
 
-            <div class="form-group">
-                <label for="plazo">
-                    Plazo del financiamiento
-                </label>
+            </form>
 
-                <select id="plazo" name="plazo" required>
-                    <option value="12">12 meses</option>
-                    <option value="24">24 meses</option>
-                    <option value="36">36 meses</option>
-                    <option value="48" selected>48 meses</option>
-                    <option value="60">60 meses</option>
-                </select>
-            </div>
+        </section>
 
-            <button type="submit" id="btn-calcular">
-                Calcular crédito
-            </button>
-
-        </form>
-
-
-        <section id="resultados" aria-live="polite">
+        <section
+            id="resultados"
+            aria-live="polite"
+        >
 
             <h2>Resultado</h2>
 
+
             <div class="resumen">
 
+
                 <div class="resultado-card">
-                    <span>Primer pago</span>
-                    <strong id="pago-inicial">$0.00</strong>
+
+                    <span>
+                        Primer pago
+                    </span>
+
+                    <strong id="pago-inicial">
+                        $0.00
+                    </strong>
+
                 </div>
 
                 <div class="resultado-card">
-                    <span>Total de intereses</span>
-                    <strong id="total-intereses">$0.00</strong>
+
+                    <span>
+                        Total de intereses
+                    </span>
+
+                    <strong id="total-intereses">
+                        $0.00
+                    </strong>
+
                 </div>
 
                 <div class="resultado-card">
-                    <span>Total de IVA</span>
-                    <strong id="total-iva">$0.00</strong>
+
+                    <span>
+                        Total de IVA
+                    </span>
+
+                    <strong id="total-iva">
+                        $0.00
+                    </strong>
+
                 </div>
 
                 <div class="resultado-card">
-                    <span>Total a pagar</span>
-                    <strong id="total-pagar">$0.00</strong>
+
+                    <span>
+                        Total a pagar
+                    </span>
+
+                    <strong id="total-pagar">
+                        $0.00
+                    </strong>
+
                 </div>
 
             </div>
 
-
-            <h2>Tabla de amortización</h2>
+            <h2>
+                Tabla de amortización
+            </h2>
 
             <div class="tabla-container">
 
                 <table id="tabla-amortizacion">
 
                     <thead>
+
                         <tr>
-                            <th>Periodo</th>
-                            <th>Saldo inicial</th>
-                            <th>Capital</th>
-                            <th>Interés</th>
-                            <th>IVA</th>
-                            <th>Pago total</th>
-                            <th>Saldo final</th>
+
+                            <th>
+                                Periodo
+                            </th>
+
+                            <th>
+                                Saldo inicial
+                            </th>
+
+                            <th>
+                                Capital
+                            </th>
+
+                            <th>
+                                Interés
+                            </th>
+
+                            <th>
+                                IVA
+                            </th>
+
+                            <th>
+                                Pago total
+                            </th>
+
+                            <th>
+                                Saldo final
+                            </th>
+
                         </tr>
+
                     </thead>
 
                     <tbody>
@@ -137,4 +457,5 @@
     </main>
 
 </body>
+
 </html>
